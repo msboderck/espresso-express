@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Espresso Express — drive-thru espresso bar in Eugene, Oregon. Real double shots, pulled to order, two-minute lane.">
+<title>Espresso Express</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --ground: #F7F1E8;      /* steamed milk */
+    --ground-2: #EFE5D6;    /* kraft sleeve */
+    --ink: #2A1911;         /* espresso */
+    --ink-2: #6B5343;       /* roast brown, secondary text */
+    --line: #D9CBB8;
+    --crema: #D98A2B;       /* accent */
+    --crema-deep: #B56E1C;
+    --on-crema: #1F110A;
+    --card: #FFFCF7;
+    --shadow: 0 1px 0 rgba(42,25,17,.06), 0 12px 32px -18px rgba(42,25,17,.35);
+    --display: "Bebas Neue", "Oswald", Impact, "Arial Narrow", sans-serif;
+    --body: "Work Sans", "Helvetica Neue", Arial, sans-serif;
+    --mono: "IBM Plex Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #1E120C;
+      --ground-2: #291A12;
+      --ink: #F5EBDD;
+      --ink-2: #C9B39C;
+      --line: #4A3527;
+      --crema: #E9A24A;
+      --crema-deep: #F2B866;
+      --on-crema: #1F110A;
+      --card: #2B1B13;
+      --shadow: 0 1px 0 rgba(0,0,0,.2), 0 12px 32px -18px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #1E120C;
+    --ground-2: #291A12;
+    --ink: #F5EBDD;
+    --ink-2: #C9B39C;
+    --line: #4A3527;
+    --crema: #E9A24A;
+    --crema-deep: #F2B866;
+    --on-crema: #1F110A;
+    --card: #2B1B13;
+    --shadow: 0 1px 0 rgba(0,0,0,.2), 0 12px 32px -18px rgba(0,0,0,.7);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 17px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  h1, h2, h3 { margin: 0; text-wrap: balance; font-weight: 400; }
+  p { margin: 0; }
+  .wrap { width: min(1120px, 100% - 40px); margin-inline: auto; }
+
+  /* lane stripe motif: dashed road marking */
+  .lane {
+    height: 6px;
+    background: repeating-linear-gradient(90deg, var(--crema) 0 48px, transparent 48px 72px);
+    border-radius: 3px;
+  }
+
+  /* nav */
+  .nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 0; gap: 24px;
+  }
+  .brand {
+    font-family: var(--display); font-size: 30px; letter-spacing: .04em; line-height: 1;
+    text-decoration: none; display: flex; align-items: center; gap: 10px;
+  }
+  .brand .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--crema); }
+  .nav ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 28px; }
+  .nav ul a { text-decoration: none; font-weight: 500; font-size: 15px; color: var(--ink-2); }
+  .nav ul a:hover, .nav ul a:focus-visible { color: var(--ink); }
+  .btn {
+    display: inline-block; font-family: var(--display); letter-spacing: .06em; font-size: 20px;
+    padding: 12px 22px 10px; border-radius: 999px; text-decoration: none; line-height: 1;
+    background: var(--crema); color: var(--on-crema); border: 2px solid var(--crema);
+    transition: transform .15s ease, background .15s ease;
+  }
+  .btn:hover { background: var(--crema-deep); border-color: var(--crema-deep); transform: translateY(-1px); }
+  .btn.ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+  .btn.ghost:hover { border-color: var(--ink); background: transparent; }
+  :focus-visible { outline: 3px solid var(--crema); outline-offset: 3px; }
+
+  /* hero */
+  .hero {
+    display: grid; grid-template-columns: 1.15fr .85fr; gap: 48px; align-items: center;
+    padding: 56px 0 64px;
+  }
+  .eyebrow {
+    font-family: var(--mono); font-size: 13px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--ink-2); display: flex; align-items: center; gap: 12px;
+  }
+  .eyebrow::before { content: ""; width: 28px; height: 2px; background: var(--crema); }
+  .hero h1 {
+    font-family: var(--display); font-size: clamp(64px, 9vw, 128px); line-height: .92;
+    letter-spacing: .01em; margin: 18px 0 22px;
+  }
+  .hero h1 em { font-style: normal; color: var(--crema); }
+  .hero .lede { font-size: 20px; color: var(--ink-2); max-width: 30em; }
+  .hero .cta { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 30px; }
+
+  /* the shot ticket (hero visual) */
+  .ticket {
+    background: var(--card); border-radius: 18px; box-shadow: var(--shadow);
+    padding: 26px 28px; font-family: var(--mono); font-size: 14px; position: relative;
+    border: 1px solid var(--line);
+  }
+  .ticket .head { display: flex; justify-content: space-between; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-2); }
+  .ticket .big {
+    font-family: var(--display); font-size: 76px; line-height: 1; margin: 14px 0 4px; letter-spacing: .02em;
+  }
+  .ticket .big small { font-size: 28px; color: var(--ink-2); letter-spacing: .06em; }
+  .ticket .sub { color: var(--ink-2); margin-bottom: 18px; }
+  .ticket dl { display: grid; grid-template-columns: 1fr auto; row-gap: 8px; margin: 0; border-top: 1px dashed var(--line); padding-top: 16px; font-variant-numeric: tabular-nums; }
+  .ticket dt { color: var(--ink-2); }
+  .ticket dd { margin: 0; text-align: right; font-weight: 500; }
+  .ticket .bar {
+    height: 10px; border-radius: 5px; background: var(--ground-2); margin-top: 18px; overflow: hidden;
+  }
+  .ticket .bar i { display: block; height: 100%; width: 100%; background: var(--crema); transform-origin: left; animation: pull 25s linear infinite; }
+  @keyframes pull { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  @media (prefers-reduced-motion: reduce) { .ticket .bar i { animation: none; } }
+
+  /* promise strip */
+  .promise {
+    display: grid; grid-template-columns: repeat(3, 1fr); border-block: 1px solid var(--line);
+  }
+  .promise > div { padding: 28px 24px; border-right: 1px solid var(--line); }
+  .promise > div:last-child { border-right: 0; }
+  .promise .n { font-family: var(--display); font-size: 56px; line-height: 1; color: var(--crema); letter-spacing: .02em; }
+  .promise .n small { font-size: 22px; color: var(--ink-2); letter-spacing: .06em; margin-left: 4px; }
+  .promise h3 { font-family: var(--body); font-weight: 600; font-size: 17px; margin-top: 8px; }
+  .promise p { color: var(--ink-2); font-size: 15px; margin-top: 4px; max-width: 28em; }
+
+  /* sections */
+  section.block { padding: 72px 0; }
+  .sec-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 36px; }
+  .sec-head h2 { font-family: var(--display); font-size: clamp(44px, 5vw, 64px); line-height: .95; letter-spacing: .02em; }
+  .sec-head p { color: var(--ink-2); max-width: 32em; }
+
+  /* menu */
+  .menu { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .menu-col { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 22px 24px; }
+  .menu-col h3 { font-family: var(--display); font-size: 28px; letter-spacing: .04em; padding-bottom: 12px; border-bottom: 2px solid var(--crema); margin-bottom: 8px; }
+  .menu-col ul { list-style: none; margin: 0; padding: 0; }
+  .menu-col li { display: grid; grid-template-columns: 1fr auto; gap: 14px; padding: 11px 0; border-bottom: 1px dashed var(--line); align-items: baseline; }
+  .menu-col li:last-child { border-bottom: 0; }
+  .menu-col .name { font-weight: 500; }
+  .menu-col .desc { display: block; color: var(--ink-2); font-size: 14px; }
+  .menu-col .price { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 15px; white-space: nowrap; }
+  .menu-note { margin-top: 18px; color: var(--ink-2); font-size: 14px; font-family: var(--mono); }
+
+  /* how it works */
+  .how { background: var(--ground-2); }
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+  .steps .k { font-family: var(--mono); font-size: 13px; letter-spacing: .12em; color: var(--crema-deep); text-transform: uppercase; }
+  .steps h3 { font-family: var(--display); font-size: 34px; letter-spacing: .03em; margin: 8px 0 8px; }
+  .steps p { color: var(--ink-2); }
+
+  /* visit */
+  .visit { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+  .hours { font-family: var(--mono); font-size: 15px; font-variant-numeric: tabular-nums; }
+  .hours div { display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px dashed var(--line); }
+  .hours div:last-child { border-bottom: 0; }
+  .hours .today { color: var(--crema-deep); font-weight: 500; }
+  .addr { font-size: 19px; line-height: 1.5; }
+  .addr strong { display: block; font-family: var(--display); font-size: 30px; letter-spacing: .03em; }
+  .map {
+    margin-top: 22px; aspect-ratio: 16/8; border-radius: 16px; border: 1px solid var(--line);
+    background:
+      linear-gradient(var(--line) 1px, transparent 1px) 0 0/48px 48px,
+      linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0/48px 48px,
+      var(--card);
+    position: relative; overflow: hidden;
+  }
+  .map .road { position: absolute; left: -5%; right: -5%; top: 48%; height: 26px; background: var(--ground-2); border-block: 2px solid var(--line); }
+  .map .road::after { content: ""; position: absolute; inset: 11px 0; background: repeating-linear-gradient(90deg, var(--crema) 0 26px, transparent 26px 44px); }
+  .map .pin {
+    position: absolute; left: 56%; top: 22%; background: var(--crema); color: var(--on-crema);
+    font-family: var(--display); letter-spacing: .06em; padding: 8px 12px 6px; border-radius: 8px; font-size: 18px;
+  }
+  .map .pin::after { content: ""; position: absolute; left: 14px; bottom: -8px; border: 8px solid transparent; border-top-color: var(--crema); border-bottom: 0; }
+
+  /* footer cta */
+  .cta-band { background: var(--ink); color: var(--ground); padding: 64px 0; }
+  .cta-band .wrap { display: flex; align-items: center; justify-content: space-between; gap: 32px; }
+  .cta-band h2 { font-family: var(--display); font-size: clamp(44px, 6vw, 84px); line-height: .95; letter-spacing: .02em; }
+  .cta-band p { color: color-mix(in srgb, var(--ground) 70%, var(--ink)); margin-top: 10px; max-width: 26em; }
+  footer { padding: 28px 0 40px; font-size: 14px; color: var(--ink-2); display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+  footer a { text-decoration: none; }
+
+  @media (max-width: 860px) {
+    .nav ul { display: none; }
+    .hero { grid-template-columns: 1fr; padding-top: 32px; }
+    .promise, .menu, .steps, .visit { grid-template-columns: 1fr; }
+    .promise > div { border-right: 0; border-bottom: 1px solid var(--line); }
+    .promise > div:last-child { border-bottom: 0; }
+    .sec-head { flex-direction: column; align-items: start; }
+    .cta-band .wrap { flex-direction: column; align-items: start; }
+  }
+</style>
+</head>
+<body>
+<header class="wrap">
+  <nav class="nav" aria-label="Main">
+    <a class="brand" href="#top"><span class="dot"></span>Espresso Express</a>
+    <ul>
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#visit">Visit</a></li>
+    </ul>
+    <a class="btn" href="#order">Order ahead</a>
+  </nav>
+  <div class="lane" aria-hidden="true"></div>
+</header>
+
+<main id="top">
+  <section class="wrap hero">
+    <div>
+      <p class="eyebrow">Drive-thru espresso bar · Open 5:30 AM</p>
+      <h1>Real espresso.<br><em>Two-minute</em> lane.</h1>
+      <p class="lede">Every drink starts with a freshly ground double shot, pulled to order. No pods, no pre-batched pots, no ten-car wait. Pull in, pull away.</p>
+      <div class="cta">
+        <a class="btn" href="#order">Order ahead</a>
+        <a class="btn ghost" href="#menu">See the menu</a>
+      </div>
+    </div>
+    <div class="ticket" aria-label="How we pull a shot">
+      <div class="head"><span>Shot ticket</span><span>Lane 1</span></div>
+      <div class="big">25<small>SEC</small></div>
+      <p class="sub">Double shot, pulled to order</p>
+      <dl>
+        <dt>Dose</dt><dd>18 g</dd>
+        <dt>Yield</dt><dd>36 g</dd>
+        <dt>Pressure</dt><dd>9 bar</dd>
+        <dt>Water</dt><dd>93 °C</dd>
+        <dt>Roasted</dt><dd>≤ 14 days ago</dd>
+      </dl>
+      <div class="bar" aria-hidden="true"><i></i></div>
+    </div>
+  </section>
+
+  <div class="wrap promise">
+    <div>
+      <div class="n">2<small>MIN</small></div>
+      <h3>Order to window</h3>
+      <p>Two lanes, two machines, one goal: you're gone before the song ends.</p>
+    </div>
+    <div>
+      <div class="n">18<small>G</small></div>
+      <h3>Every shot is a double</h3>
+      <p>Ground the second you order. Singles cost us more in wasted beans than they save you.</p>
+    </div>
+    <div>
+      <div class="n">14<small>DAYS</small></div>
+      <h3>Roast-date rule</h3>
+      <p>Beans older than two weeks go to cold brew, never to the grinder.</p>
+    </div>
+  </div>
+
+  <section class="block wrap" id="menu">
+    <div class="sec-head">
+      <h2>The menu</h2>
+      <p>Short on purpose. Every drink here can be made in under a minute by someone who cares about it.</p>
+    </div>
+    <div class="menu">
+      <div class="menu-col">
+        <h3>Espresso</h3>
+        <ul>
+          <li><span><span class="name">Double shot</span><span class="desc">18 g in, 36 g out, served in a real cup if you're parking</span></span><span class="price">$3.25</span></li>
+          <li><span><span class="name">Americano</span><span class="desc">Double over hot water, 12 oz</span></span><span class="price">$3.75</span></li>
+          <li><span><span class="name">Cortado</span><span class="desc">Equal parts espresso and steamed milk, 4 oz</span></span><span class="price">$4.25</span></li>
+          <li><span><span class="name">Cappuccino</span><span class="desc">Tight foam, 6 oz, no art if we're slammed</span></span><span class="price">$4.50</span></li>
+          <li><span><span class="name">Latte</span><span class="desc">12 oz / 16 oz</span></span><span class="price">$4.75 / 5.25</span></li>
+        </ul>
+      </div>
+      <div class="menu-col">
+        <h3>Cold</h3>
+        <ul>
+          <li><span><span class="name">Iced latte</span><span class="desc">Shots over cold milk, never over ice first</span></span><span class="price">$5.25</span></li>
+          <li><span><span class="name">Cold brew</span><span class="desc">18-hour steep, 16 oz</span></span><span class="price">$4.50</span></li>
+          <li><span><span class="name">Shaken espresso</span><span class="desc">Double, demerara, oat milk</span></span><span class="price">$5.75</span></li>
+          <li><span><span class="name">Espresso tonic</span><span class="desc">Double over Fever-Tree, orange peel</span></span><span class="price">$5.50</span></li>
+        </ul>
+      </div>
+      <div class="menu-col">
+        <h3>Not coffee</h3>
+        <ul>
+          <li><span><span class="name">Hot chocolate</span><span class="desc">Real dark chocolate, steamed in</span></span><span class="price">$4.25</span></li>
+          <li><span><span class="name">Chai latte</span><span class="desc">House-brewed concentrate</span></span><span class="price">$4.75</span></li>
+          <li><span><span class="name">Loose-leaf tea</span><span class="desc">Earl Grey, sencha, peppermint</span></span><span class="price">$3.25</span></li>
+          <li><span><span class="name">Morning bun</span><span class="desc">From the bakery two blocks down, delivered 5 AM</span></span><span class="price">$4.00</span></li>
+        </ul>
+      </div>
+    </div>
+    <p class="menu-note">Oat, almond, whole, 2%: no upcharge. Extra shot +$1. Prices shown are sample prices.</p>
+  </section>
+
+  <section class="block how" id="how">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>How the lane works</h2>
+        <p>Three stops. The whole point is that you never turn off the car.</p>
+      </div>
+      <div class="steps">
+        <div>
+          <span class="k">Stop 1 · Order</span>
+          <h3>Order ahead or at the board</h3>
+          <p>Tap your usual in the app before you leave the house, or tell us at the speaker. Regulars get recognized by plate.</p>
+        </div>
+        <div>
+          <span class="k">Stop 2 · Pull</span>
+          <h3>Ground and pulled while you roll</h3>
+          <p>Your shot starts the moment the order lands. By the time you reach the window, it's in the cup, not in a queue.</p>
+        </div>
+        <div>
+          <span class="k">Stop 3 · Window</span>
+          <h3>Grab, tap, go</h3>
+          <p>Card, phone, or app credit. We hand you the cup lid-down so the foam survives the on-ramp.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block wrap visit" id="visit">
+    <div>
+      <div class="sec-head" style="margin-bottom:20px">
+        <h2>Find the lane</h2>
+      </div>
+      <p class="addr">
+        <strong>1480 Willamette St</strong>
+        Eugene, OR 97401<br>
+        Corner of 15th, right-turn entry from Willamette northbound.<br>
+        <a href="tel:+15415550187">(541) 555-0187</a>
+      </p>
+      <div class="map" role="img" aria-label="Sketch map showing the drive-thru entrance off Willamette Street">
+        <div class="road"></div>
+        <div class="pin">Enter here</div>
+      </div>
+    </div>
+    <div>
+      <div class="sec-head" style="margin-bottom:20px">
+        <h2>Hours</h2>
+      </div>
+      <div class="hours">
+        <div><span>Monday – Friday</span><span>5:30 AM – 6:00 PM</span></div>
+        <div><span>Saturday</span><span>6:00 AM – 5:00 PM</span></div>
+        <div><span>Sunday</span><span>7:00 AM – 2:00 PM</span></div>
+        <div><span>Game days (Autzen)</span><span class="today">Open from 5:00 AM</span></div>
+      </div>
+      <p style="color:var(--ink-2);margin-top:18px;font-size:15px">Walk-up window on the 15th Street side for bikes and pedestrians. Same menu, same two minutes.</p>
+    </div>
+  </section>
+
+  <section class="cta-band" id="order">
+    <div class="wrap">
+      <div>
+        <h2>Your usual, waiting at the window.</h2>
+        <p>Save your order once. Next time it's one tap and a two-minute drive-thru.</p>
+      </div>
+      <a class="btn" href="#top">Download the app</a>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <span>© 2026 Espresso Express · Eugene, Oregon</span>
+  <span><a href="#top">Instagram</a> · <a href="#top">Wholesale</a> · <a href="#top">Jobs</a></span>
+</footer>
+</body>
+</html>
